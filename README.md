@@ -16,6 +16,8 @@ Instale as dependências com `pnpm install`, execute `pnpm dev` e acesse a porta
 
 O backend envia os resultados para `GOOGLE_APPS_SCRIPT_URL` quando essa variável está configurada. O código do endpoint está em [`google-apps-script/Code.gs`](./google-apps-script/Code.gs), com instruções em [`google-apps-script/README.md`](./google-apps-script/README.md). A aba esperada é `2ºDS (Magnificação)`.
 
+A planilha registra as respostas discursivas nas colunas correspondentes. O professor lança notas de 0 a 1 nas três colunas de correção; então as fórmulas calculam a `Nota final` de 0 a 10 e alteram o `Status da correção` para `Corrigida`.
+
 Opcionalmente, configure `GOOGLE_APPS_SCRIPT_SECRET` no backend e a propriedade `SCRIPT_SHARED_SECRET` no Apps Script. Para habilitar a geração dinâmica por LLM, configure `USE_LLM_GENERATION=true`. Para habilitar geração de imagens por IA como camada adicional, configure `USE_IMAGE_GENERATION=true`; as imagens reais licenciadas permanecem como fallback didático.
 
 ## Licenças

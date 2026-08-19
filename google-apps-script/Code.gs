@@ -53,7 +53,10 @@ function doPost(e) {
     lock.waitLock(15000);
     try {
       const row = buildRow_(payload);
-      sheet.getRange(sheet.getLastRow() + 1, 1, 1, row.length).setValues([row]);
+      const targetRow = sheet.getLastRow() + 1;
+      sheet.getRange(targetRow, 1, 1, row.length).setValues([row]);
+      sheet.getRange(targetRow, 27).setFormula(`=IF(COUNTA(X${targetRow}:Z${targetRow})=0,"",ROUND(U${targetRow}+SUM(X${targetRow}:Z${targetRow}),2))`);
+      sheet.getRange(targetRow, 28).setFormula(`=IF(COUNTA(X${targetRow}:Z${targetRow})=3,"Corrigida","Pendente")`);
     } finally {
       lock.releaseLock();
     }
@@ -98,9 +101,13 @@ function getOrCreateSheet_() {
 
 function ensureHeaders_(sheet) {
   const headers = buildHeaders_();
-  if (sheet.getLastRow() === 0) {
+  const currentWidth = Math.max(sheet.getLastColumn(), 0);
+  const currentHeaders = currentWidth ? sheet.getRange(1, 1, 1, currentWidth).getValues()[0] : [];
+  const needsUpdate = sheet.getLastRow() === 0 || currentHeaders.length !== headers.length || headers.some((header, index) => currentHeaders[index] !== header);
+  if (needsUpdate) {
     sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
     sheet.setFrozenRows(1);
+    sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold').setBackground('#0f766e').setFontColor('#ffffff');
   }
 }
 
@@ -113,6 +120,11 @@ function buildHeaders_() {
     ...Array.from({ length: 3 }, (_, index) => `Dissertativa ${index + 8}`),
     ...Array.from({ length: CONFIG.OBJECTIVE_COUNT }, (_, index) => `Gabarito ${index + 1}`),
     'Pontuação objetiva',
+    'Nota dissertativa 8',
+    'Nota dissertativa 9',
+    'Nota dissertativa 10',
+    'Nota final',
+    'Status da correção',
     'Versão da aplicação',
     'Navegador / dispositivo',
   ];
@@ -131,6 +143,11 @@ function buildRow_(payload) {
     ...subjectiveAnswers,
     ...objectiveKey,
     Number.isFinite(Number(payload.objectiveScore)) ? Number(payload.objectiveScore) : '',
+    '',
+    '',
+    '',
+    '',
+    'Pendente',
     normalizeText_(payload.appVersion || ''),
     normalizeText_(payload.userAgent || ''),
   ];
