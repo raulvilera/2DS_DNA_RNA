@@ -1,0 +1,22 @@
+# Project TODO
+
+- [x] Analisar os conteúdos das Aulas 1, 2 e 3 anexadas
+- [x] Extrair e validar a lista de alunos do arquivo Alunos2ºDS.xlt
+- [x] Definir o modelo de geração das 7 questões objetivas e 3 dissertativas
+- [x] Implementar geração dinâmica de questões com LLM no backend
+- [x] Implementar geração/seleção de imagens contextualizadas por questão
+- [x] Manter o gabarito objetivo somente no backend até o envio
+- [x] Implementar endpoint/procedure para iniciar uma tentativa avaliativa
+- [x] Implementar endpoint/procedure para enviar respostas e corrigir objetivas
+- [x] Integrar o envio com a aba 2ºDS (Magnificação) do Google Sheets
+- [x] Criar cabeçalho escolar, dropdown de alunos e título da atividade
+- [x] Criar interface responsiva para as 7 questões objetivas
+- [x] Criar interface responsiva para as 3 questões dissertativas
+- [x] Implementar validações de preenchimento e estado de envio
+- [x] Adicionar testes Vitest para geração, proteção do gabarito e envio
+- [x] Executar typecheck, testes e verificação visual responsiva
+- [ ] Salvar checkpoint final e entregar a versão do projeto
+- [ ] Obter credencial técnica ou URL de Apps Script para gravar respostas na planilha em produção
+- [x] Preparar código do Google Apps Script para receber e registrar envios da atividade
+- [x] Substituir as ilustrações vetoriais por imagens reais contextualizadas
+- [ ] Verificar e publicar a versão final no repositório GitHub https://github.com/raulvilera/2DS_DNA_RNA
