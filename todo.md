@@ -24,7 +24,7 @@
 - [x] Corrigir a implantação do Apps Script: a nova implantação respondeu com redirecionamento 302 padrão do endpoint
 - [x] Validar a nova URL do Apps Script e substituir a URL anterior se o endpoint estiver funcional
 - [x] Testar novamente a URL confirmada do bloco App da Web e concluir a configuração do endpoint
-- [ ] Adicionar colunas para notas das 3 dissertativas, nota final e status de correção
-- [ ] Atualizar o Apps Script para calcular e expor a nota final após correção do professor
-- [ ] Criar instruções para o professor lançar notas dissertativas na planilha
-- [ ] Validar a estrutura da aba e atualizar o código publicado
+- [x] Adicionar colunas para notas das 3 dissertativas, nota final e status de correção
+- [x] Atualizar o Apps Script para calcular e expor a nota final após correção do professor
+- [x] Criar instruções para o professor lançar notas dissertativas na planilha
+- [x] Validar a estrutura da aba e atualizar o código publicado

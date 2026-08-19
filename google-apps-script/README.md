@@ -14,13 +14,13 @@ Em seguida, abra **Implantar → Nova implantação**, selecione **Aplicativo da
 
 A aplicação grava automaticamente as sete respostas objetivas, o gabarito objetivo, a pontuação objetiva e as três respostas dissertativas. As colunas `Nota dissertativa 8`, `Nota dissertativa 9` e `Nota dissertativa 10` ficam inicialmente vazias para correção manual do professor.
 
-O professor deve atribuir a cada dissertativa uma nota de **0 a 1 ponto**, digitando os valores nas colunas `X`, `Y` e `Z`. A planilha calcula automaticamente a `Nota final` na coluna `AA`:
+O professor deve atribuir a cada dissertativa uma nota de **0 a 1 ponto**, digitando os valores nas colunas `V`, `W` e `X`. A planilha calcula automaticamente a `Nota final` na coluna `Y`:
 
 `Nota final = Pontuação objetiva + Nota dissertativa 8 + Nota dissertativa 9 + Nota dissertativa 10`
 
-A coluna `AB` muda de `Pendente` para `Corrigida` quando as três notas discursivas são preenchidas. Como são 7 questões objetivas e 3 dissertativas, a nota final varia de 0 a 10 pontos.
+A coluna `Z` muda de `Pendente` para `Corrigida` quando as três notas discursivas são preenchidas. As colunas `AA` e `AB` permanecem reservadas para a versão da aplicação e o navegador/dispositivo. Como são 7 questões objetivas e 3 dissertativas, a nota final varia de 0 a 10 pontos.
 
-Recomenda-se proteger as colunas de respostas e gabaritos, deixando editáveis para o professor apenas `X:Z`.
+Recomenda-se proteger as colunas de respostas e gabaritos, deixando editáveis para o professor apenas `V:X`.
 
 Quando um novo envio chegar, o Apps Script verifica a linha de cabeçalhos e amplia automaticamente uma aba antiga para incluir as colunas de correção, preservando os dados existentes.
 

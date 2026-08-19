@@ -55,8 +55,8 @@ function doPost(e) {
       const row = buildRow_(payload);
       const targetRow = sheet.getLastRow() + 1;
       sheet.getRange(targetRow, 1, 1, row.length).setValues([row]);
-      sheet.getRange(targetRow, 27).setFormula(`=IF(COUNTA(X${targetRow}:Z${targetRow})=0,"",ROUND(U${targetRow}+SUM(X${targetRow}:Z${targetRow}),2))`);
-      sheet.getRange(targetRow, 28).setFormula(`=IF(COUNTA(X${targetRow}:Z${targetRow})=3,"Corrigida","Pendente")`);
+      sheet.getRange(targetRow, 25).setFormula(`=IF(COUNTA(V${targetRow}:X${targetRow})=0,"",ROUND(U${targetRow}+SUM(V${targetRow}:X${targetRow}),2))`);
+      sheet.getRange(targetRow, 26).setFormula(`=IF(COUNTA(V${targetRow}:X${targetRow})=3,"Corrigida","Pendente")`);
     } finally {
       lock.releaseLock();
     }
