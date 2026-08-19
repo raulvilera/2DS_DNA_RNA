@@ -36,33 +36,61 @@ const imageBank = [
   "/manus-storage/rna-polymerase_20f7f191.png",
   "/manus-storage/hela-cells_1a148774.jpg",
   "/manus-storage/henrietta-lacks_cc414bc5.jpg",
+  "/manus-storage/chromosomes-microscope_006a3c8d.jpg",
+  "/manus-storage/ribosome-shape_ab3bede2.png",
+  "/manus-storage/dna-replication_80449b82.png",
+  "/manus-storage/cells-microscope_d050457a.jpg",
+  "/manus-storage/rna-transcription_8aa532eb.jpg",
+  "/manus-storage/dna-chemical-structure_ee0efb40.png",
 ];
 function imageForTopic(topic: string) {
-  if (["DNA e RNA", "Replicação", "Genoma", "Enzimas", "DNA/RNA"].includes(topic)) return imageBank[0];
-  if (["Transcrição", "Tipos de RNA"].includes(topic)) return imageBank[1];
+  if (["DNA e RNA", "DNA/RNA"].includes(topic)) return imageBank[0];
+  if (["Replicação", "Genoma"].includes(topic)) return imageBank[6];
+  if (topic === "Enzimas") return imageBank[1];
+  if (topic === "Transcrição") return imageBank[8];
+  if (topic === "Tipos de RNA") return imageBank[5];
   if (topic === "Células HeLa") return imageBank[2];
   if (["Bioética", "Confidencialidade"].includes(topic)) return imageBank[3];
   return imageBank[0];
 }
 
+function ensureUniqueImages(questions: PrivateQuestion[], seed: number) {
+  const topicPriority: Record<string, number[]> = {
+    "DNA e RNA": [0, 9], "DNA/RNA": [9, 0], Replicação: [6, 4], Genoma: [4, 9],
+    Enzimas: [1, 6], Transcrição: [8, 1], "Tipos de RNA": [5, 8],
+    "Células HeLa": [2, 7], Bioética: [3, 7], Confidencialidade: [3, 7],
+  };
+  const used = new Set<string>();
+  return questions.map((question, index) => {
+    const preferred = topicPriority[question.topic] ?? [];
+    const allImages = Array.from({ length: imageBank.length }, (_, i) => i);
+    const preferredAvailable = preferred.find(indexValue => !used.has(imageBank[indexValue]));
+    const fallbackAvailable = allImages.find(indexValue => !used.has(imageBank[indexValue]));
+    const selectedIndex = preferredAvailable ?? fallbackAvailable ?? preferred[0] ?? (Math.abs(seed + index) % imageBank.length);
+    const selected = imageBank[selectedIndex];
+    used.add(selected);
+    return { ...question, image: selected };
+  });
+}
+
 const objectivePool: PrivateQuestion[] = [
-  { id: "o1", kind: "objective", topic: "DNA e RNA", prompt: "Em relação ao DNA e ao RNA, qual alternativa apresenta uma diferença correta entre essas moléculas?", options: ["O DNA contém ribose e o RNA contém desoxirribose.", "O DNA possui, em geral, duas fitas; o RNA, uma fita simples.", "O DNA usa uracila no lugar da timina.", "O RNA é formado por aminoácidos, não por nucleotídeos."], answer: "B", image: imageForTopic("DNA e RNA") },
-  { id: "o2", kind: "objective", topic: "Replicação", prompt: "Uma fita de DNA apresenta a sequência A–T–G–C. Qual sequência representa sua complementaridade?", options: ["A–T–G–C", "U–A–C–G", "T–A–C–G", "G–C–A–T"], answer: "C", image: imageForTopic("DNA e RNA") },
-  { id: "o3", kind: "objective", topic: "Genoma", prompt: "O conceito de genoma corresponde a:", options: ["Uma única proteína produzida por uma célula.", "O conjunto completo de DNA de um organismo.", "Apenas as moléculas de RNA mensageiro.", "O conjunto de órgãos de um indivíduo."], answer: "B", image: imageForTopic("DNA e RNA") },
-  { id: "o4", kind: "objective", topic: "Transcrição", prompt: "Na expressão gênica, a transcrição é o processo que produz:", options: ["RNA usando uma sequência de DNA como molde.", "DNA usando uma proteína como molde.", "Aminoácidos usando lipídios como molde.", "Glicose a partir de RNA."], answer: "A", image: imageForTopic("Transcrição") },
-  { id: "o5", kind: "objective", topic: "Tipos de RNA", prompt: "Qual tipo de RNA leva a informação genética do DNA até o ribossomo?", options: ["RNA mensageiro (RNAm).", "RNA transportador (RNAt).", "RNA ribossômico (RNAr).", "RNA de reserva."], answer: "A", image: imageForTopic("Transcrição") },
-  { id: "o6", kind: "objective", topic: "Bioética", prompt: "No caso Henrietta Lacks, qual princípio bioético é diretamente relacionado à autorização para coleta e uso de material biológico?", options: ["Autonomia e consentimento.", "Competição entre pesquisadores.", "Velocidade experimental.", "Publicidade dos dados pessoais."], answer: "A", image: imageForTopic("Bioética") },
-  { id: "o7", kind: "objective", topic: "Confidencialidade", prompt: "Divulgar dados de saúde identificáveis de participantes de uma pesquisa, sem autorização, viola principalmente o princípio da:", options: ["Replicação.", "Confidencialidade.", "Transcrição.", "Seleção natural."], answer: "B", image: imageForTopic("Bioética") },
-  { id: "o8", kind: "objective", topic: "Replicação", prompt: "Por que a replicação do DNA é chamada de semiconservativa?", options: ["Porque utiliza apenas metade das bases.", "Porque cada molécula nova possui uma fita antiga e uma fita nova.", "Porque acontece apenas em metade da célula.", "Porque produz somente metade dos cromossomos."], answer: "B", image: imageForTopic("DNA e RNA") },
-  { id: "o9", kind: "objective", topic: "Enzimas", prompt: "Quais enzimas participam diretamente da abertura e da síntese de novas fitas durante a replicação?", options: ["Helicase e DNA polimerase.", "Amilase e pepsina.", "Lipase e RNAse.", "Catalase e lactase."], answer: "A", image: imageForTopic("DNA e RNA") },
-  { id: "o10", kind: "objective", topic: "Células HeLa", prompt: "A importância científica das células HeLa está relacionada ao fato de elas:", options: ["Terem encerrado todos os estudos sobre câncer.", "Terem contribuído para pesquisas em vacinas, medicamentos e tumores.", "Serem células de uma planta usada em fotossíntese.", "Não poderem ser cultivadas em laboratório."], answer: "B", image: imageForTopic("Células HeLa") },
+  { id: "o1", kind: "objective", topic: "DNA e RNA", prompt: "Durante uma investigação sobre material genético em células humanas, uma equipe compara duas moléculas envolvidas no armazenamento e no uso da informação hereditária. Em relação ao DNA e ao RNA, qual alternativa apresenta uma diferença correta entre essas moléculas?", options: ["O DNA contém ribose e o RNA contém desoxirribose.", "O DNA possui, em geral, duas fitas; o RNA, uma fita simples.", "O DNA usa uracila no lugar da timina.", "O RNA é formado por aminoácidos, não por nucleotídeos."], answer: "B", image: imageForTopic("DNA e RNA") },
+  { id: "o2", kind: "objective", topic: "Replicação", prompt: "Em uma aula prática, uma estudante observa uma pequena sequência de uma fita de DNA e precisa prever a fita complementar para compreender como a molécula é copiada. Uma fita apresenta A–T–G–C. Qual sequência representa sua complementaridade?", options: ["A–T–G–C", "U–A–C–G", "T–A–C–G", "G–C–A–T"], answer: "C", image: imageForTopic("Replicação") },
+  { id: "o3", kind: "objective", topic: "Genoma", prompt: "Em um projeto de sequenciamento, pesquisadores reúnem todas as informações presentes no material genético de um organismo. Nesse contexto, o conceito de genoma corresponde a:", options: ["Uma única proteína produzida por uma célula.", "O conjunto completo de DNA de um organismo.", "Apenas as moléculas de RNA mensageiro.", "O conjunto de órgãos de um indivíduo."], answer: "B", image: imageForTopic("Genoma") },
+  { id: "o4", kind: "objective", topic: "Transcrição", prompt: "Em uma célula, a informação de um gene precisa ser transformada em uma molécula que possa deixar o núcleo e participar da produção de proteínas. Na expressão gênica, a transcrição é o processo que produz:", options: ["RNA usando uma sequência de DNA como molde.", "DNA usando uma proteína como molde.", "Aminoácidos usando lipídios como molde.", "Glicose a partir de RNA."], answer: "A", image: imageForTopic("Transcrição") },
+  { id: "o5", kind: "objective", topic: "Tipos de RNA", prompt: "Durante a síntese de uma proteína, uma cópia temporária da informação genética sai do núcleo e chega ao ribossomo. Qual tipo de RNA realiza essa função?", options: ["RNA mensageiro (RNAm).", "RNA transportador (RNAt).", "RNA ribossômico (RNAr).", "RNA de reserva."], answer: "A", image: imageForTopic("Tipos de RNA") },
+  { id: "o6", kind: "objective", topic: "Bioética", prompt: "Ao estudar o caso Henrietta Lacks, uma turma debate quais direitos devem ser respeitados quando células humanas são coletadas e utilizadas em pesquisas. Qual princípio bioético está diretamente relacionado à autorização para coleta e uso de material biológico?", options: ["Autonomia e consentimento.", "Competição entre pesquisadores.", "Velocidade experimental.", "Publicidade dos dados pessoais."], answer: "A", image: imageForTopic("Bioética") },
+  { id: "o7", kind: "objective", topic: "Confidencialidade", prompt: "Uma equipe deseja publicar resultados de uma pesquisa, mas o relatório contém nomes e diagnósticos dos participantes sem autorização. Essa conduta viola principalmente o princípio da:", options: ["Replicação.", "Confidencialidade.", "Transcrição.", "Seleção natural."], answer: "B", image: imageForTopic("Confidencialidade") },
+  { id: "o8", kind: "objective", topic: "Replicação", prompt: "Antes de uma célula se dividir, seu DNA precisa ser copiado com fidelidade. Por que a replicação do DNA é chamada de semiconservativa?", options: ["Porque utiliza apenas metade das bases.", "Porque cada molécula nova possui uma fita antiga e uma fita nova.", "Porque acontece apenas em metade da célula.", "Porque produz somente metade dos cromossomos."], answer: "B", image: imageForTopic("Replicação") },
+  { id: "o9", kind: "objective", topic: "Enzimas", prompt: "Em uma animação de laboratório, uma enzima abre a dupla-hélice e outra adiciona nucleotídeos complementares às novas fitas. Quais enzimas participam diretamente desses dois momentos da replicação?", options: ["Helicase e DNA polimerase.", "Amilase e pepsina.", "Lipase e RNAse.", "Catalase e lactase."], answer: "A", image: imageForTopic("Enzimas") },
+  { id: "o10", kind: "objective", topic: "Células HeLa", prompt: "As células HeLa são utilizadas em diferentes linhas de pesquisa biomédica. Considerando sua relevância histórica e científica, é correto afirmar que elas:", options: ["Terem encerrado todos os estudos sobre câncer.", "Terem contribuído para pesquisas em vacinas, medicamentos e tumores.", "Serem células de uma planta usada em fotossíntese.", "Não poderem ser cultivadas em laboratório."], answer: "B", image: imageForTopic("Células HeLa") },
 ];
 const subjectivePool: PrivateQuestion[] = [
-  { id: "s1", kind: "subjective", topic: "Bioética", prompt: "Explique por que o caso de Henrietta Lacks é importante para discutir consentimento, justiça e respeito à dignidade humana na pesquisa científica.", rubric: "Deve relacionar consentimento/autonomia, uso de material biológico, desigualdades históricas e dignidade.", image: imageForTopic("Bioética") },
-  { id: "s2", kind: "subjective", topic: "Replicação", prompt: "Explique, com suas palavras, como ocorre a replicação semiconservativa do DNA e qual é a função da helicase e da DNA polimerase.", rubric: "Deve mencionar separação das fitas, complementaridade e uma fita antiga + uma nova.", image: imageForTopic("DNA e RNA") },
-  { id: "s3", kind: "subjective", topic: "Transcrição", prompt: "Compare transcrição e tradução, indicando o papel do RNA mensageiro na produção de proteínas.", rubric: "Deve diferenciar DNA→RNA e RNA→proteína, com função do RNAm.", image: imageForTopic("Transcrição") },
-  { id: "s4", kind: "subjective", topic: "Confidencialidade", prompt: "Uma pesquisa divulga diagnósticos dos participantes com nome e cidade. Analise o problema ético e proponha uma forma responsável de divulgar os resultados.", rubric: "Deve reconhecer quebra de confidencialidade e propor anonimização/consentimento.", image: imageForTopic("Bioética") },
-  { id: "s5", kind: "subjective", topic: "DNA/RNA", prompt: "Descreva duas diferenças estruturais entre DNA e RNA e explique por que essas diferenças são importantes para suas funções.", rubric: "Deve citar fita, açúcar ou base e relacionar estrutura/função.", image: imageForTopic("DNA e RNA") },
+  { id: "s1", kind: "subjective", topic: "Bioética", prompt: "Imagine que um hospital queira utilizar células retiradas de uma paciente em uma pesquisa que poderá gerar tratamentos e patentes. Explique, a partir do caso Henrietta Lacks, por que consentimento, justiça e respeito à dignidade humana devem ser considerados.", rubric: "Deve relacionar consentimento/autonomia, uso de material biológico, desigualdades históricas e dignidade.", image: imageForTopic("Bioética") },
+  { id: "s2", kind: "subjective", topic: "Replicação", prompt: "Durante a preparação para a divisão celular, uma equipe precisa explicar como o DNA é duplicado. Descreva, com suas palavras, as etapas da replicação semiconservativa e as funções da helicase e da DNA polimerase.", rubric: "Deve mencionar separação das fitas, complementaridade e uma fita antiga + uma nova.", image: imageForTopic("Replicação") },
+  { id: "s3", kind: "subjective", topic: "Transcrição", prompt: "Uma célula do fígado precisa produzir uma proteína específica após receber um sinal hormonal. Compare transcrição e tradução e explique o papel do RNA mensageiro nesse processo.", rubric: "Deve diferenciar DNA→RNA e RNA→proteína, com função do RNAm.", image: imageForTopic("Transcrição") },
+  { id: "s4", kind: "subjective", topic: "Confidencialidade", prompt: "Uma pesquisa sobre uma doença rara pretende divulgar diagnósticos acompanhados de nome, cidade e idade dos participantes. Analise o problema ético e proponha uma forma responsável de apresentar os resultados.", rubric: "Deve reconhecer quebra de confidencialidade e propor anonimização/consentimento.", image: imageForTopic("Confidencialidade") },
+  { id: "s5", kind: "subjective", topic: "DNA/RNA", prompt: "Em uma análise comparativa, você precisa explicar por que o DNA é adequado para armazenar informação por longos períodos e o RNA atua frequentemente como intermediário. Descreva duas diferenças estruturais entre DNA e RNA e relacione-as às funções dessas moléculas.", rubric: "Deve citar fita, açúcar ou base e relacionar estrutura/função.", image: imageForTopic("DNA e RNA") },
 ];
 
 async function maybeGenerateWithLlm(seed: number) {
@@ -108,7 +136,7 @@ async function createAttempt() {
   const llmSet = await maybeGenerateWithLlm(seed);
   const objective = llmSet?.filter(q => q.kind === "objective") ?? shuffle(objectivePool, seed).slice(0, 7);
   const subjective = llmSet?.filter(q => q.kind === "subjective") ?? shuffle(subjectivePool, seed + 23).slice(0, 3);
-  const privateQuestions = await enrichQuestionImages([...objective, ...subjective]);
+  const privateQuestions = ensureUniqueImages(await enrichQuestionImages([...objective, ...subjective]), seed);
   const attemptId = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
   attempts.set(attemptId, privateQuestions);
   setTimeout(() => attempts.delete(attemptId), 45 * 60 * 1000);

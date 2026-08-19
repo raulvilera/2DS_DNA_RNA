@@ -30,19 +30,8 @@ describe("activity", () => {
     expect(result.questions.filter(question => question.kind === "subjective")).toHaveLength(3);
     expect(result.questions.every(question => !("answer" in question))).toBe(true);
     expect(result.questions.every(question => question.image.startsWith("/manus-storage/") || question.image.startsWith("data:image/svg+xml"))).toBe(true);
-    const expectedImages: Record<string, string> = {
-      "DNA e RNA": "dna-double-helix",
-      "Replicação": "dna-double-helix",
-      "Genoma": "dna-double-helix",
-      "Enzimas": "dna-double-helix",
-      "DNA/RNA": "dna-double-helix",
-      "Transcrição": "rna-polymerase",
-      "Tipos de RNA": "rna-polymerase",
-      "Células HeLa": "hela-cells",
-      "Bioética": "henrietta-lacks",
-      "Confidencialidade": "henrietta-lacks",
-    };
-    result.questions.forEach(question => expect(question.image).toContain(expectedImages[question.topic]));
+    expect(result.questions.every(question => question.image.startsWith("/manus-storage/"))).toBe(true);
+    expect(new Set(result.questions.map(question => question.image)).size).toBe(result.questions.length);
   });
 
   it("sends the complete payload to Apps Script when configured", async () => {

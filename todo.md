@@ -28,3 +28,8 @@
 - [x] Atualizar o Apps Script para calcular e expor a nota final após correção do professor
 - [x] Criar instruções para o professor lançar notas dissertativas na planilha
 - [x] Validar a estrutura da aba e atualizar o código publicado
+- [ ] Reimplantar o `Code.gs` corrigido na implantação do Apps Script para ativar as fórmulas V:Z em novos envios
+- [x] Separar visualmente o dropdown da área de conteúdo e limitar sua altura com rolagem
+- [x] Reescrever as questões com maior contextualização didática
+- [x] Diversificar as imagens por questão, evitando repetição visual
+- [ ] Validar desktop e celular, publicar no GitHub e salvar checkpoint
