@@ -30,16 +30,24 @@ describe("activity", () => {
     expect(result.questions.filter(question => question.kind === "subjective")).toHaveLength(3);
     expect(result.questions.every(question => !("answer" in question))).toBe(true);
     expect(result.questions.every(question => question.image.startsWith("/manus-storage/") || question.image.startsWith("data:image/svg+xml"))).toBe(true);
-    const byTopic = new Map(result.questions.map(question => [question.topic, question.image]));
-    expect(byTopic.get("DNA e RNA")).toContain("dna-double-helix");
-    expect(byTopic.get("Transcrição")).toContain("rna-polymerase");
-    expect(byTopic.get("Células HeLa")).toContain("hela-cells");
-    expect(byTopic.get("Bioética")).toContain("henrietta-lacks");
+    const expectedImages: Record<string, string> = {
+      "DNA e RNA": "dna-double-helix",
+      "Replicação": "dna-double-helix",
+      "Genoma": "dna-double-helix",
+      "Enzimas": "dna-double-helix",
+      "DNA/RNA": "dna-double-helix",
+      "Transcrição": "rna-polymerase",
+      "Tipos de RNA": "rna-polymerase",
+      "Células HeLa": "hela-cells",
+      "Bioética": "henrietta-lacks",
+      "Confidencialidade": "henrietta-lacks",
+    };
+    result.questions.forEach(question => expect(question.image).toContain(expectedImages[question.topic]));
   });
 
   it("sends the complete payload to Apps Script when configured", async () => {
     process.env.GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/test/exec";
-    const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(JSON.stringify({ ok: true }), { status: 200 }));
+    const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(null, { status: 302, headers: { Location: "https://script.googleusercontent.com/macros/echo" } }));
     const api = caller();
     const attempt = await api.activity.start();
     const response = await api.activity.submit({
@@ -49,6 +57,7 @@ describe("activity", () => {
       subjectiveAnswers: ["Resposta sobre bioética.", "Resposta sobre replicação.", "Resposta sobre transcrição."],
     });
     expect(response.sheets.sent).toBe(true);
+    expect(response.sheets.status).toBe(302);
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(String(fetchMock.mock.calls[0]?.[0])).toContain("script.google.com");
   });

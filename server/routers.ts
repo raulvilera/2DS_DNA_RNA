@@ -118,10 +118,11 @@ async function createAttempt() {
 async function sendToSheets(payload: Record<string, unknown>) {
   const url = process.env.GOOGLE_APPS_SCRIPT_URL;
   if (!url) return { sent: false, reason: "GOOGLE_APPS_SCRIPT_URL não configurada" };
-  const response = await fetch(url, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) });
+  const response = await fetch(url, { method: "POST", redirect: "manual", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) });
   const text = await response.text();
-  if (!response.ok) throw new Error(`Apps Script respondeu ${response.status}: ${text.slice(0, 200)}`);
-  return { sent: true };
+  const accepted = response.ok || [301, 302, 303, 307, 308].includes(response.status);
+  if (!accepted) throw new Error(`Apps Script respondeu ${response.status}: ${text.slice(0, 200)}`);
+  return { sent: true, status: response.status };
 }
 
 export const appRouter = router({

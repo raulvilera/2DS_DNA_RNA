@@ -16,8 +16,11 @@
 - [x] Adicionar testes Vitest para geração, proteção do gabarito e envio
 - [x] Executar typecheck, testes e verificação visual responsiva
 - [x] Salvar checkpoint final e entregar a versão do projeto
-- [ ] Obter credencial técnica ou URL de Apps Script para gravar respostas na planilha em produção
+- [x] Obter credencial técnica ou URL de Apps Script para gravar respostas na planilha em produção
 - [x] Preparar código do Google Apps Script para receber e registrar envios da atividade
 - [x] Substituir as ilustrações vetoriais por imagens reais contextualizadas
 - [x] Verificar e publicar a versão final no repositório GitHub https://github.com/raulvilera/2DS_DNA_RNA
-- [ ] Configurar e validar a URL publicada do Google Apps Script em produção
+- [x] Configurar e validar a URL publicada do Google Apps Script em produção
+- [x] Corrigir a implantação do Apps Script: a nova implantação respondeu com redirecionamento 302 padrão do endpoint
+- [x] Validar a nova URL do Apps Script e substituir a URL anterior se o endpoint estiver funcional
+- [x] Testar novamente a URL confirmada do bloco App da Web e concluir a configuração do endpoint
