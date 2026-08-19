@@ -15,8 +15,9 @@
 - [x] Implementar validações de preenchimento e estado de envio
 - [x] Adicionar testes Vitest para geração, proteção do gabarito e envio
 - [x] Executar typecheck, testes e verificação visual responsiva
-- [ ] Salvar checkpoint final e entregar a versão do projeto
+- [x] Salvar checkpoint final e entregar a versão do projeto
 - [ ] Obter credencial técnica ou URL de Apps Script para gravar respostas na planilha em produção
 - [x] Preparar código do Google Apps Script para receber e registrar envios da atividade
 - [x] Substituir as ilustrações vetoriais por imagens reais contextualizadas
-- [ ] Verificar e publicar a versão final no repositório GitHub https://github.com/raulvilera/2DS_DNA_RNA
+- [x] Verificar e publicar a versão final no repositório GitHub https://github.com/raulvilera/2DS_DNA_RNA
+- [ ] Configurar e validar a URL publicada do Google Apps Script em produção
