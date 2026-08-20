@@ -19,7 +19,7 @@ button, input, textarea { font: inherit; }
 .student-dropdown [role="option"] { min-height: 34px; border-radius: 8px; padding: 8px 10px; color: #29463f; font-size: 12px; }
 .student-dropdown [role="option"][data-highlighted] { color: #183c35; background: #e8f4ef; }
 .series-badge { color: #47716a; background: #e1f1ea; border-radius: 999px; padding: 10px 15px; font-size: 13px; white-space: nowrap; }
-.student-details { display: grid; grid-template-columns: .6fr .9fr 2.2fr; gap: 12px; padding: 14px 0 18px; border-bottom: 1px solid #d7e6df; }
+.student-details { display: grid; grid-template-columns: .55fr .75fr 1.1fr 2.4fr; gap: 12px; padding: 14px 0 18px; border-bottom: 1px solid #d7e6df; }
 .student-details > div { min-width: 0; padding: 11px 13px; border: 1px solid #dceae4; border-radius: 10px; background: #fbfdfc; }
 .student-details span { display: block; margin-bottom: 5px; color: #81938e; font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
 .student-details strong { display: block; overflow: hidden; color: #29463f; font-size: 12px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }

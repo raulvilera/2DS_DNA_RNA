@@ -37,7 +37,7 @@
 - [x] Remover a linha técnica pós-reimplantação após a confirmação das fórmulas
 - [x] Corrigir as fórmulas de nota para a localidade da planilha e reimplantar o Apps Script
 - [x] Revalidar a linha técnica sem `#ERROR!` e removê-la após a confirmação
-- [ ] Carregar número, série, RA e e-mail institucional junto ao aluno selecionado
-- [ ] Exibir campos separados de número, série, RA e e-mail institucional no cabeçalho
-- [ ] Registrar os dados cadastrais na aba 2ºDS (Magnificação)
-- [ ] Atualizar testes, publicar no GitHub e salvar checkpoint
+- [x] Carregar número, série, RA e e-mail institucional junto ao aluno selecionado
+- [x] Exibir campos separados de número, série, RA e e-mail institucional no cabeçalho
+- [x] Registrar os dados cadastrais na aba 2ºDS (Magnificação)
+- [x] Atualizar testes, publicar no GitHub e salvar checkpoint
