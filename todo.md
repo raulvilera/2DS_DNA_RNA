@@ -41,3 +41,5 @@
 - [x] Exibir campos separados de número, série, RA e e-mail institucional no cabeçalho
 - [x] Registrar os dados cadastrais na aba 2ºDS (Magnificação)
 - [x] Atualizar testes, publicar no GitHub e salvar checkpoint
+- [ ] Reimplantar o Apps Script com os campos AA:AD e validar uma nova linha com número, série, RA e e-mail após o ajuste final
+- [ ] Remover a nova linha técnica após validar o mapeamento final AA:AD

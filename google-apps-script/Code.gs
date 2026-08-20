@@ -125,12 +125,12 @@ function buildHeaders_() {
     'Nota dissertativa 10',
     'Nota final',
     'Status da correção',
-    'Versão da aplicação',
-    'Navegador / dispositivo',
     'Número de chamada',
     'Série',
     'RA',
     'E-mail institucional',
+    'Versão da aplicação',
+    'Navegador / dispositivo',
   ];
 }
 
@@ -152,12 +152,12 @@ function buildRow_(payload) {
     '',
     '',
     'Pendente',
-    normalizeText_(payload.appVersion || ''),
-    normalizeText_(payload.userAgent || ''),
     normalizeText_(payload.studentNumber || ''),
     normalizeText_(payload.series || ''),
     normalizeText_(payload.ra || ''),
     normalizeText_(payload.institutionalEmail || ''),
+    normalizeText_(payload.appVersion || ''),
+    normalizeText_(payload.userAgent || ''),
   ];
 }
 
