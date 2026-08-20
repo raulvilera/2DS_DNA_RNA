@@ -22,6 +22,18 @@ function caller() {
 }
 
 describe("activity", () => {
+  it("returns the student roster with cadastral fields", async () => {
+    const result = await caller().activity.students();
+    expect(result.length).toBeGreaterThan(0);
+    expect(result[0]).toMatchObject({
+      name: expect.any(String),
+      number: expect.any(String),
+      series: "2ºDS",
+      ra: expect.any(String),
+      institutionalEmail: expect.stringContaining("@al.educacao.sp.gov.br"),
+    });
+  });
+
   it("generates 7 objective and 3 subjective questions without exposing the answer key", async () => {
     const result = await caller().activity.start();
     expect(result.attemptId).toBeTruthy();

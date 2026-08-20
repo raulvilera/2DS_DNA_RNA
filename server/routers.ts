@@ -5,16 +5,40 @@ import { publicProcedure, router } from "./_core/trpc";
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 
-const students = [
-  "ALAN EDUARDO DOS SANTOS BARBOSA", "ANA BEATRIZ DE LIMA TOMAZ", "ANA BEATRIZ MOURA AMARO OLIVEIRA",
-  "ANDRÉ DOS REIS ARAÚJO", "ANNY LUIZA MARQUES DE SOUZA", "ARTUR SANTOS DE OLIVEIRA", "BEATRIZ TEODORO FURLAN",
-  "CATHARINA KESS RUBIO MENDES", "DANIEL FERREIRA DOS SANTOS", "FELIPE AUGUSTO DE SOUZA ALCARAZ", "GEOVANNA DOS SANTOS MENDES",
-  "HENRY ALVES TOZZI DA SILVA PIRES", "ISABELLA MONTEIRO BARCELLOS", "JENNIFER CARVALHO COSTA", "JUHAN DOS SANTOS MARIN",
-  "JULIA ARAUJO DE LIMA", "JULIANA SILVA DE LIMA NEVES", "LEANDRO MACIEL CORRÊA", "LEONARDO LIMA DE JESUS",
-  "MARIAH LUIZA DO NASCIMENTO CARVALHO", "MISAEL MARTINS DE ANDRADE JUNIOR", "MURILO GABRIEL RIOS LEAO", "NATAN SANTOS XAVIER",
-  "NICOLE PEREIRA LUCIANO", "PIETRO COELHO MARTINS", "POUL WILLYAM MACHADO ALVES DOS SANTOS", "RAPHAEL DA SILVA TAVARES",
-  "VICTOR DANIEL GARCIA SANCHEZ", "VITOR HUGO SILVA RIO BRANCO", "VITOR VINICIUS PEREIRA VASCONCELOS", "ESTELA RODRIGUES DE OLIVEIRA",
-];
+type StudentRecord = { name: string; number: string; series: string; ra: string; institutionalEmail: string };
+const students: StudentRecord[] = [
+  ["1", "ALAN EDUARDO DOS SANTOS BARBOSA", "111875511", "0000111875511XSP@al.educacao.sp.gov.br"],
+  ["3", "ANA BEATRIZ DE LIMA TOMAZ", "113210071", "00001132100719SP@al.educacao.sp.gov.br"],
+  ["4", "ANA BEATRIZ MOURA AMARO OLIVEIRA", "110212382", "00001102123821SP@al.educacao.sp.gov.br"],
+  ["6", "ANDRÉ DOS REIS ARAÚJO", "111880119", "00001118801192SP@al.educacao.sp.gov.br"],
+  ["7", "ANNY LUIZA MARQUES DE SOUZA", "111794550", "00001117945509SP@al.educacao.sp.gov.br"],
+  ["8", "ARTUR SANTOS DE OLIVEIRA", "113221702", "00001132217027SP@al.educacao.sp.gov.br"],
+  ["9", "BEATRIZ TEODORO FURLAN", "114163979", "00001141639798SP@al.educacao.sp.gov.br"],
+  ["10", "CATHARINA KESS RUBIO MENDES", "115022281", "00001150222815SP@al.educacao.sp.gov.br"],
+  ["11", "DANIEL FERREIRA DOS SANTOS", "112222620", "00001122226202SP@al.educacao.sp.gov.br"],
+  ["15", "FELIPE AUGUSTO DE SOUZA ALCARAZ", "112600640", "00001126006403SP@al.educacao.sp.gov.br"],
+  ["16", "GEOVANNA DOS SANTOS MENDES", "114164783", "00001141647837SP@al.educacao.sp.gov.br"],
+  ["17", "HENRY ALVES TOZZI DA SILVA PIRES", "113218140", "00001132181409SP@al.educacao.sp.gov.br"],
+  ["18", "ISABELLA MONTEIRO BARCELLOS", "114240619", "00001142406192SP@al.educacao.sp.gov.br"],
+  ["19", "JENNIFER CARVALHO COSTA", "114160908", "00001141609083SP@al.educacao.sp.gov.br"],
+  ["20", "JUHAN DOS SANTOS MARIN", "114240559", "0000114240559XSP@al.educacao.sp.gov.br"],
+  ["21", "JULIA ARAUJO DE LIMA", "111722111", "00001117221118SP@al.educacao.sp.gov.br"],
+  ["22", "JULIANA SILVA DE LIMA NEVES", "111772387", "00001117723872SP@al.educacao.sp.gov.br"],
+  ["25", "LEANDRO MACIEL CORRÊA", "113805632", "00001138056327SP@al.educacao.sp.gov.br"],
+  ["26", "LEONARDO LIMA DE JESUS", "112210601", "00001122106014SP@al.educacao.sp.gov.br"],
+  ["27", "MARIAH LUIZA DO NASCIMENTO CARVALHO", "114156246", "00001141562467SP@al.educacao.sp.gov.br"],
+  ["29", "MISAEL MARTINS DE ANDRADE JUNIOR", "113211001", "00001132110014SP@al.educacao.sp.gov.br"],
+  ["30", "MURILO GABRIEL RIOS LEAO", "112226021", "00001122260210SP@al.educacao.sp.gov.br"],
+  ["31", "NATAN SANTOS XAVIER", "112219880", "00001122198802SP@al.educacao.sp.gov.br"],
+  ["33", "NICOLE PEREIRA LUCIANO", "113213561", "00001132135618SP@al.educacao.sp.gov.br"],
+  ["35", "PIETRO COELHO MARTINS", "115110037", "00001151100377SP@al.educacao.sp.gov.br"],
+  ["36", "POUL WILLYAM MACHADO ALVES DOS SANTOS", "111126877", "00001111268770SP@al.educacao.sp.gov.br"],
+  ["38", "RAPHAEL DA SILVA TAVARES", "115083570", "00001150835709SP@al.educacao.sp.gov.br"],
+  ["40", "VICTOR DANIEL GARCIA SANCHEZ", "121000792", "00001210007927SP@al.educacao.sp.gov.br"],
+  ["42", "VITOR HUGO SILVA RIO BRANCO", "113209983", "00001132099833SP@al.educacao.sp.gov.br"],
+  ["43", "VITOR VINICIUS PEREIRA VASCONCELOS", "110335387", "00001103353871SP@al.educacao.sp.gov.br"],
+  ["45", "ESTELA RODRIGUES DE OLIVEIRA", "114241807", "00001142418078SP@al.educacao.sp.gov.br"],
+].map(([number, name, ra, institutionalEmail]) => ({ name, number, series: "2ºDS", ra, institutionalEmail }));
 
 type PublicQuestion = { id: string; kind: "objective" | "subjective"; topic: string; prompt: string; options?: string[]; image: string };
 type PrivateQuestion = PublicQuestion & { answer?: string; rubric?: string };
@@ -159,14 +183,16 @@ export const appRouter = router({
   activity: router({
     students: publicProcedure.query(() => students),
     start: publicProcedure.mutation(() => createAttempt()),
-    submit: publicProcedure.input(z.object({ attemptId: z.string(), studentName: z.string().min(1), objectiveAnswers: z.array(z.enum(["A", "B", "C", "D", ""])).length(7), subjectiveAnswers: z.array(z.string().max(12000)).length(3) })).mutation(async ({ input }) => {
+    submit: publicProcedure.input(z.object({ attemptId: z.string(), studentName: z.string().min(1), studentNumber: z.string().optional(), series: z.string().optional(), ra: z.string().optional(), institutionalEmail: z.string().email().optional(), objectiveAnswers: z.array(z.enum(["A", "B", "C", "D", ""])).length(7), subjectiveAnswers: z.array(z.string().max(12000)).length(3) })).mutation(async ({ input }) => {
       const questions = attempts.get(input.attemptId);
       if (!questions) throw new Error("Tentativa expirada. Recarregue a atividade para gerar uma nova versão.");
       const objective = questions.filter(q => q.kind === "objective");
       const subjective = questions.filter(q => q.kind === "subjective");
       const key = objective.map(q => q.answer || "");
       const score = input.objectiveAnswers.reduce((total, answer, index) => total + (answer === key[index] ? 1 : 0), 0);
-      const sheets = await sendToSheets({ secret: process.env.GOOGLE_APPS_SCRIPT_SECRET || "", studentName: input.studentName, attemptId: input.attemptId, submittedAt: new Date().toISOString(), objectiveAnswers: input.objectiveAnswers, subjectiveAnswers: input.subjectiveAnswers, objectiveKey: key, objectiveScore: score, appVersion: "2ds-bio-1.0", userAgent: "server" });
+      const student = students.find(candidate => candidate.name === input.studentName);
+      if (!student) throw new Error("Aluno não encontrado no cadastro do 2ºDS.");
+      const sheets = await sendToSheets({ secret: process.env.GOOGLE_APPS_SCRIPT_SECRET || "", studentName: student.name, studentNumber: student.number, series: student.series, ra: student.ra, institutionalEmail: student.institutionalEmail, attemptId: input.attemptId, submittedAt: new Date().toISOString(), objectiveAnswers: input.objectiveAnswers, subjectiveAnswers: input.subjectiveAnswers, objectiveKey: key, objectiveScore: score, appVersion: "2ds-bio-1.0", userAgent: "server" });
       attempts.delete(input.attemptId);
       return { ok: true, score, objectiveCount: objective.length, subjectiveCount: subjective.length, sheets };
     }),

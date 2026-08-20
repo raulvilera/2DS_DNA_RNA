@@ -55,8 +55,8 @@ function doPost(e) {
       const row = buildRow_(payload);
       const targetRow = sheet.getLastRow() + 1;
       sheet.getRange(targetRow, 1, 1, row.length).setValues([row]);
-      sheet.getRange(targetRow, 25).setFormula(`=IF(COUNTA(V${targetRow}:X${targetRow})=0,"",ROUND(U${targetRow}+SUM(V${targetRow}:X${targetRow}),2))`);
-      sheet.getRange(targetRow, 26).setFormula(`=IF(COUNTA(V${targetRow}:X${targetRow})=3,"Corrigida","Pendente")`);
+      sheet.getRange(targetRow, 25).setFormula(`=IF(COUNTA(V${targetRow}:X${targetRow})=0;"";ROUND(U${targetRow}+SUM(V${targetRow}:X${targetRow});2))`);
+      sheet.getRange(targetRow, 26).setFormula(`=IF(COUNTA(V${targetRow}:X${targetRow})=3;"Corrigida";"Pendente")`);
     } finally {
       lock.releaseLock();
     }
@@ -127,6 +127,10 @@ function buildHeaders_() {
     'Status da correção',
     'Versão da aplicação',
     'Navegador / dispositivo',
+    'Número de chamada',
+    'Série',
+    'RA',
+    'E-mail institucional',
   ];
 }
 
@@ -150,6 +154,10 @@ function buildRow_(payload) {
     'Pendente',
     normalizeText_(payload.appVersion || ''),
     normalizeText_(payload.userAgent || ''),
+    normalizeText_(payload.studentNumber || ''),
+    normalizeText_(payload.series || ''),
+    normalizeText_(payload.ra || ''),
+    normalizeText_(payload.institutionalEmail || ''),
   ];
 }
 
